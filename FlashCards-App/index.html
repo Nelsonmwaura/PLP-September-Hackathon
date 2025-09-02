@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flashcards App</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="data:,">
+  <meta name="description" content="Interactive flashcards with study mode, keyboard shortcuts, and curated free learning resources.">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand">
+        <span class="logo">⚡</span>
+        <span class="brand-name">Flashcards</span>
+      </div>
+      <nav class="nav">
+        <a href="#create" class="nav-link active">Create</a>
+        <a href="#study" class="nav-link">Study</a>
+        <a href="#quiz" class="nav-link">Quiz</a>
+        <a href="#all-cards" class="nav-link">Library</a>
+        <button type="button" id="resources-btn" class="btn">Resources</button>
+        <button id="theme-toggle" class="btn" type="button" aria-label="Toggle dark mode">🌙</button>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <section id="create" class="container panel">
+      <h2>Create flashcards</h2>
+      <form id="flashcard-form" class="stack">
+        <div class="grid-two">
+          <input type="text" id="question" placeholder="Question" required>
+          <input type="text" id="answer" placeholder="Answer" required>
+        </div>
+        <div class="row">
+          <select id="subject" class="select">
+            <option value="General">General</option>
+            <option value="Math">Math</option>
+            <option value="Science">Science</option>
+            <option value="Programming">Programming</option>
+            <option value="Language">Language</option>
+          </select>
+        </div>
+        <div class="row">
+          <button type="submit" class="btn primary">Add</button>
+          <button type="button" id="clear-all" class="btn danger outline">Clear All</button>
+        </div>
+      </form>
+    </section>
+
+    <section id="study" class="container panel">
+      <div class="study-header">
+        <h2>Study mode</h2>
+        <div class="controls">
+          <select id="filter-subject" class="select">
+            <option value="All">All Subjects</option>
+            <option value="General">General</option>
+            <option value="Math">Math</option>
+            <option value="Science">Science</option>
+            <option value="Programming">Programming</option>
+            <option value="Language">Language</option>
+          </select>
+          <button class="btn" id="prev-card" aria-label="Previous">⟵ Prev</button>
+          <button class="btn" id="flip-card" aria-label="Flip (Space)">Flip ⎵</button>
+          <button class="btn" id="next-card" aria-label="Next">Next ⟶</button>
+          <button class="btn" id="shuffle" aria-label="Shuffle">Shuffle</button>
+        </div>
+      </div>
+
+      <div class="study-stage">
+        <div class="flip-card" id="active-card" tabindex="0" aria-live="polite">
+          <div class="flip-card-inner">
+            <div class="flip-card-front"><span class="placeholder">Add cards to begin</span></div>
+            <div class="flip-card-back"></div>
+          </div>
+        </div>
+      </div>
+      <div class="progress" id="progress">0 / 0</div>
+    </section>
+
+    <section id="quiz" class="container panel">
+      <div class="study-header">
+        <h2>Quiz Mode</h2>
+        <div class="controls">
+          <select id="quiz-filter-subject" class="select">
+            <option value="All">All Subjects</option>
+            <option value="General">General</option>
+            <option value="Math">Math</option>
+            <option value="Science">Science</option>
+            <option value="Programming">Programming</option>
+            <option value="Language">Language</option>
+          </select>
+          <button class="btn primary" id="start-quiz">Start Quiz</button>
+        </div>
+      </div>
+      <div id="quiz-stage" class="study-stage" style="display: none;">
+        <div id="quiz-card" class="card" style="min-height: 150px; display: grid; place-items: center;">
+          <div id="quiz-question" style="font-size: 1.2rem;"></div>
+        </div>
+        <div id="quiz-options" class="quiz-options" style="margin-top: 20px; display: grid; gap: 10px;"></div>
+        <div style="margin-top: 20px; display: flex; justify-content: center; gap: 10px;">
+            <button id="submit-answer" class="btn primary">Submit</button>
+            <button id="next-question" class="btn" style="display: none;">Next</button>
+        </div>
+        <div id="quiz-feedback" style="text-align: center; margin-top: 10px; font-weight: bold;"></div>
+      </div>
+      <div id="quiz-results" style="display: none; text-align: center;">
+        <h3>Quiz Complete!</h3>
+        <p>Your score: <span id="final-score">0</span> / <span id="total-questions">0</span></p>
+        <button id="restart-quiz" class="btn">Restart Quiz</button>
+      </div>
+      <div class="progress" id="quiz-progress" style="margin-top: 10px;"></div>
+    </section>
+
+    <section id="all-cards" class="container panel">
+      <h2>Card Library</h2>
+      <div class="topic-nav-header">
+        <div id="topic-nav-container" class="topic-nav"></div>
+        <div class="add-topic-form">
+          <input type="text" id="new-topic-input" placeholder="New Topic Name">
+          <button id="add-topic-btn" class="btn">Add</button>
+        </div>
+      </div>
+      <div class="cards" id="cards-container"></div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>Built for learning. Use Space to flip, ← → to navigate.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+
+  <div id="resources-modal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Free Learning Resources</h2>
+        <button id="close-modal" class="btn">&times;</button>
+      </div>
+      <ul class="resource-list">
+        <li><a target="_blank" rel="noopener" href="https://www.khanacademy.org/">Khan Academy</a> — Free courses in math, science, and more</li>
+        <li><a target="_blank" rel="noopener" href="https://www.freecodecamp.org/">freeCodeCamp</a> — Interactive coding tutorials and projects</li>
+        <li><a target="_blank" rel="noopener" href="https://www.coursera.org/">Coursera (Audit)</a> — Audit many courses for free</li>
+        <li><a target="_blank" rel="noopener" href="https://ocw.mit.edu/">MIT OpenCourseWare</a> — Free course materials from MIT</li>
+        <li><a target="_blank" rel="noopener" href="https://www.duolingo.com/">Duolingo</a> — Language learning gamified</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>
